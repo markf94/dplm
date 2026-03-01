@@ -358,7 +358,7 @@ def import_modules(models_dir, namespace, excludes=[]):
             ]
             try:
                 importlib.import_module(_namespace + "." + module_name)
-            except (ImportError, ModuleNotFoundError):
+            except Exception:
                 pass
 
 
