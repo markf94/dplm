@@ -356,7 +356,10 @@ def import_modules(models_dir, namespace, excludes=[]):
                     "." + module_name
                 )
             ]
-            importlib.import_module(_namespace + "." + module_name)
+            try:
+                importlib.import_module(_namespace + "." + module_name)
+            except (ImportError, ModuleNotFoundError):
+                pass
 
 
 def get_git_revision_hash() -> str:
