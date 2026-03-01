@@ -19,7 +19,10 @@ from byprot.datamodules.pdb_dataset.pdb_datamodule import (
 from byprot.models import register_model
 
 from .modules.ema import LitEma
-from .modules.folding_utils.decoder import ESMFoldStructureDecoder as Decoder
+try:
+    from .modules.folding_utils.decoder import ESMFoldStructureDecoder as Decoder
+except (ImportError, ModuleNotFoundError):
+    Decoder = None
 from .modules.gvp_encoder import GVPTransformerEncoderWrapper2 as Encoder
 from .modules.lfq import LFQ
 from .modules.nn import TransformerEncoder
@@ -53,7 +56,10 @@ class VQModel(nn.Module):
         self.num_codebook = codebook_config.num_codes
         self.image_key = image_key
         self.encoder = Encoder(**encoder_config)
-        self.decoder = Decoder(**decoder_config)
+        if Decoder is not None:
+            self.decoder = Decoder(**decoder_config)
+        else:
+            self.decoder = None
         self.loss = None  # instantiate_from_config(lossconfig)
         self.quantize = LFQ(
             dim=self.codebook_embed_dim,
@@ -72,16 +78,20 @@ class VQModel(nn.Module):
             self.quantize.requires_grad_(False)
             self.pre_quant.requires_grad_(False)
         # self.post_quant_conv = torch.nn.Conv2d(embed_dim, ddconfig["z_channels"], 1)
+        if self.decoder is not None:
+            decoder_input_dim = self.decoder.input_dim
+        else:
+            decoder_input_dim = self.codebook_embed_dim
         self.post_quant = nn.ModuleDict(
             {
                 "mlp": nn.Sequential(
                     nn.LayerNorm(self.codebook_embed_dim),
-                    nn.Linear(self.codebook_embed_dim, self.decoder.input_dim),
+                    nn.Linear(self.codebook_embed_dim, decoder_input_dim),
                     nn.ReLU(),
-                    nn.Linear(self.decoder.input_dim, self.decoder.input_dim),
+                    nn.Linear(decoder_input_dim, decoder_input_dim),
                 ),
                 "transformer": TransformerEncoder(
-                    self.decoder.input_dim, 8, 4
+                    decoder_input_dim, 8, 4
                 ),
             }
         )
