@@ -34,9 +34,12 @@ from .utils import aatype_to_seq, seq_to_aatype
 log = utils.get_logger(__name__)
 
 
-SHAPE_SCHEMA = dict(OF_CONFIG.data.common.feat)
-SHAPE_SCHEMA["chain_index"] = SHAPE_SCHEMA["residue_index"]
-SHAPE_SCHEMA["gvp_feat"] = SHAPE_SCHEMA["residue_index"]
+if OF_CONFIG is not None:
+    SHAPE_SCHEMA = dict(OF_CONFIG.data.common.feat)
+    SHAPE_SCHEMA["chain_index"] = SHAPE_SCHEMA["residue_index"]
+    SHAPE_SCHEMA["gvp_feat"] = SHAPE_SCHEMA["residue_index"]
+else:
+    SHAPE_SCHEMA = {}
 
 from textwrap import wrap
 
