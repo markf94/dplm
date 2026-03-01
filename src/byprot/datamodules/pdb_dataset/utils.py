@@ -22,12 +22,15 @@ import torch
 from Bio import PDB
 from Bio.PDB import PDBIO, MMCIFParser
 from Bio.PDB.Chain import Chain
-from openfold.utils import rigid_utils as ru
+try:
+    from openfold.utils import rigid_utils as ru
+except ImportError:
+    ru = None
 from torch_scatter import scatter, scatter_add
 
 from byprot.datamodules.pdb_dataset import protein, residue_constants
 
-Rigid = ru.Rigid
+Rigid = ru.Rigid if ru is not None else None
 Protein = protein.Protein
 
 # Global map from chain characters to integers.

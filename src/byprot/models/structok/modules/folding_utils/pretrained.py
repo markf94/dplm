@@ -10,7 +10,10 @@
 from pathlib import Path
 
 import torch
-from esm.esmfold.v1.esmfold import ESMFold
+try:
+    from esm.esmfold.v1.esmfold import ESMFold
+except ImportError:
+    ESMFold = None
 
 
 def _load_model(model_name):

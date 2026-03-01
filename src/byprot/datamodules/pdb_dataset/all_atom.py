@@ -19,14 +19,19 @@ Code adapted from OpenFold.
 """
 
 import torch
-from openfold.data import data_transforms
-from openfold.np import residue_constants
-from openfold.utils import rigid_utils as ru
+try:
+    from openfold.data import data_transforms
+    from openfold.np import residue_constants
+    from openfold.utils import rigid_utils as ru
+except ImportError:
+    data_transforms = None
+    residue_constants = None
+    ru = None
 
 from byprot.datamodules.pdb_dataset import utils as du
 
-Rigid = ru.Rigid
-Rotation = ru.Rotation
+Rigid = ru.Rigid if ru is not None else None
+Rotation = ru.Rotation if ru is not None else None
 
 # Residue Constants from OpenFold/AlphaFold2.
 
