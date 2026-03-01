@@ -12,6 +12,7 @@ torchtext==0.17.0
 # hydra-core==1.2.0
 # hydra-colorlog==1.2.0
 # hydra-optuna-sweeper==1.2.0
+omegaconf  # used directly by byprot (was previously a transitive dep of hydra)
 
 # --------- loggers --------- #
 # wandb
