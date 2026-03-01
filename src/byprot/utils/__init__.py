@@ -14,7 +14,10 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any, List, Sequence
 
-import hydra
+try:
+    import hydra
+except (ValueError, ImportError):
+    hydra = None
 import numpy as np
 import pytorch_lightning as pl
 import rich.syntax

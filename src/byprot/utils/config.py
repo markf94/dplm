@@ -6,7 +6,10 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any, List, Sequence
 
-import hydra
+try:
+    import hydra
+except (ValueError, ImportError):
+    hydra = None
 from omegaconf import DictConfig, OmegaConf
 from pytorch_lightning.utilities import rank_zero_only
 
