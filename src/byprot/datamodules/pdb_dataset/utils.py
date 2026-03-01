@@ -26,7 +26,11 @@ try:
     from openfold.utils import rigid_utils as ru
 except ImportError:
     ru = None
-from torch_scatter import scatter, scatter_add
+try:
+    from torch_scatter import scatter, scatter_add
+except ImportError:
+    scatter = None
+    scatter_add = None
 
 from byprot.datamodules.pdb_dataset import protein, residue_constants
 
