@@ -7,9 +7,11 @@ torch_geometric
 torchtext==0.17.0
 
 # --------- hydra --------- #
-hydra-core==1.2.0
-hydra-colorlog==1.2.0
-hydra-optuna-sweeper==1.2.0
+# Removed: hydra-core is incompatible with Python >= 3.11.14
+# (mutable dataclass defaults). Only needed for training, not inference.
+# hydra-core==1.2.0
+# hydra-colorlog==1.2.0
+# hydra-optuna-sweeper==1.2.0
 
 # --------- loggers --------- #
 # wandb
